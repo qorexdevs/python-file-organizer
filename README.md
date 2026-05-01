@@ -58,6 +58,12 @@ organize ~/Downloads --verbose
 organize ~/Downloads --watch
 ```
 
+### Include subdirectories
+
+```bash
+organize ~/Downloads --recursive
+```
+
 ### Undo the last organization
 
 ```bash
@@ -88,6 +94,7 @@ Options:
   -v, --verbose          Show detailed output.
   -w, --watch            Watch directory and auto-organize new files.
   -u, --undo             Undo the last organization.
+  -r, --recursive        Organize files in subdirectories too.
   -c, --config PATH      Path to YAML config file.
   --version              Show the version and exit.
   --help                 Show this message and exit.

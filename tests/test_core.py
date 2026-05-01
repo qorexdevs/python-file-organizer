@@ -85,7 +85,7 @@ class TestRecursive:
 
     def test_recursive_skips_category_dirs(self, sample_dir):
         organize_directory(str(sample_dir))
-        # run again with recursive — shouldn't re-sort files inside category dirs
+        # run again with recursive - shouldn't re-sort files inside category dirs
         count = organize_directory(str(sample_dir), recursive=True)
         assert count == 0
 

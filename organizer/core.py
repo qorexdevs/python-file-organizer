@@ -68,8 +68,7 @@ def _organize_single_dir(
     uncategorized: List[Path] = []
 
     for file in files:
-        ext = file.suffix.lower()
-        cat = ext_map.get(ext)
+        cat = _match_category(file, ext_map)
         if cat:
             categorized.setdefault(cat, []).append(file)
         else:
@@ -100,6 +99,15 @@ def _organize_single_dir(
             logger.info(f"  {f.name} ({f.suffix})")
 
     return count, moves
+
+
+def _match_category(file: Path, ext_map: Dict[str, str]) -> str | None:
+    name = file.name.lower()
+    for ext in sorted(ext_map, key=len, reverse=True):
+        if name.endswith(ext):
+            return ext_map[ext]
+    return None
+
 
 def _resolve_conflict(dest: Path) -> Path:
 

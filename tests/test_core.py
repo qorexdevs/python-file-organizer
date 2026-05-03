@@ -1,4 +1,4 @@
-from organizer.core import organize_directory, _resolve_conflict
+from organizer.core import organize_directory, _match_category, _resolve_conflict
 from organizer.categories import get_extension_map
 
 
@@ -68,6 +68,12 @@ class TestOrganize:
         organize_directory(str(sample_dir), dry_run=True)
         assert not (sample_dir / ".organize_undo.json").exists()
 
+    def test_prefers_long_archive_extensions(self, tmp_path):
+        (tmp_path / "backup.tar.gz").write_bytes(b"x")
+        count = organize_directory(str(tmp_path))
+        assert count == 1
+        assert (tmp_path / "Archives" / "backup.tar.gz").exists()
+
 
 class TestRecursive:
     def test_recursive_organizes_subdirs(self, tmp_path):
@@ -123,3 +129,10 @@ class TestResolveConflict:
         (tmp_path / "file_1.txt").write_text("second")
         resolved = _resolve_conflict(tmp_path / "file.txt")
         assert resolved == tmp_path / "file_2.txt"
+
+
+class TestMatchCategory:
+    def test_matches_longest_suffix_first(self, tmp_path):
+        file = tmp_path / "backup.tar.gz"
+        cat = _match_category(file, {".gz": "Compressed", ".tar.gz": "Archives"})
+        assert cat == "Archives"
